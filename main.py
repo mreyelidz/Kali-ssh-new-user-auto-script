@@ -1,3 +1,4 @@
+
 import os
 import subprocess
 
@@ -41,15 +42,25 @@ def make_new_sudoer():
     print(f"User {new_username} has been added and can now use 'sudo' command.")
 
 
+def open_firewall():
+    # Allowing all connections through firewall
+    os.system("sudo ufw allow from any to any")
+
+    # Displaying success message
+    print("All remote connections have been authorized through the firewall.")
+
+
 def main():
-    choice = int(input("Enter your choice (1 for SSH setup, 2 for New Sudoer): "))
+    choice = int(input("Enter your choice (1 for SSH setup, 2 for New Sudoer, 3 for Opening Firewall): "))
 
     if choice == 1:
         set_up_ssh()
     elif choice == 2:
         make_new_sudoer()
+    elif choice == 3:
+        open_firewall()
     else:
-        print("Invalid choice. Please enter either 1 or 2.")
+        print("Invalid choice. Please enter either 1, 2, or 3.")
 
 if __name__ == '__main__':
     main()
