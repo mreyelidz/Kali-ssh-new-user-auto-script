@@ -23,22 +23,30 @@ def set_up_ssh():
 def make_new_sudoer():
     # Getting username and password from user input
     new_username = input("Enter the new username: ")
-    new_password = input("Enter the new password: ")
+    
+    while True:
+        new_password = input("Enter the new password: ")
+        confirm_password = input("Confirm the new password: ")
 
+        # Validate that the passwords match
+        if new_password == confirm_password:
+            break
+        else:
+            print("Passwords do not match. Please try again.")
+    
     # Adding new user
     subprocess.call(["sudo", "useradd", "-m", new_username])
 
     # Setting password for the new user
     password_proc = subprocess.Popen(["sudo", "passwd", new_username], stdin=subprocess.PIPE)
-    password_proc.communicate(input=new_password.encode())
+    password_proc.communicate(input=f"{new_password}\n{new_password}".encode())
 
     # Adding the new user to the sudo group
     subprocess.call(["sudo", "usermod", "-aG", "sudo", new_username])
 
     # Display success message
     print(f"User {new_username} has been added and can now use 'sudo' command.")
-
-
+    
 def open_firewall():
     # Allowing all connections through firewall
     os.system("sudo ufw allow from any to any")
