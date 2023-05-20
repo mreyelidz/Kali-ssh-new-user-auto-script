@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 
@@ -27,16 +26,14 @@ def make_new_sudoer():
     new_password = input("Enter the new password: ")
 
     # Adding new user
-    add_user_command = f"sudo useradd -m {new_username}"
-    subprocess.call(add_user_command.split())
+    subprocess.call(["sudo", "useradd", "-m", new_username])
 
     # Setting password for the new user
-    set_password_command = f"sudo passwd {new_username}"
-    subprocess.call(set_password_command.split(), input=new_password.encode())
+    password_proc = subprocess.Popen(["sudo", "passwd", new_username], stdin=subprocess.PIPE)
+    password_proc.communicate(input=new_password.encode())
 
     # Adding the new user to the sudo group
-    add_to_sudo_command = f"sudo usermod -aG sudo {new_username}"
-    subprocess.call(add_to_sudo_command.split())
+    subprocess.call(["sudo", "usermod", "-aG", "sudo", new_username])
 
     # Display success message
     print(f"User {new_username} has been added and can now use 'sudo' command.")
@@ -63,4 +60,4 @@ def main():
         print("Invalid choice. Please enter either 1, 2, or 3.")
 
 if __name__ == '__main__':
-    main()
+    main() 
